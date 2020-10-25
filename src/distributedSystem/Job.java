@@ -1,4 +1,5 @@
 package distributedSystem;
 
-public class Process {
+public class Job {
+
 }

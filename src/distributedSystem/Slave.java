@@ -32,15 +32,8 @@ public class Slave {
 				job = null;
 			}
 
-		}
-		catch (UnknownHostException e) {
-			System.out.println("Host not found.");
-		}
-		catch (IOException e) {
-			System.out.println("IOException!");
-		}
-		catch (ClassNotFoundException e) {
-			System.out.println("Class not found.");
+		} catch (IOException | ClassNotFoundException | InterruptedException e) {
+			e.printStackTrace();
 		}
 
 	}
