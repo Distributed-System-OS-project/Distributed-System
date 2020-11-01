@@ -1,16 +1,4 @@
-
-Giving Back Website/Images/logo.png
-Giving Back Website/donate.html
-Giving Back Website/eventDescriptions.html
-Giving Back Website/gb.js
-Giving Back Website/Images/flyer1.PNG
-Giving Back Website/Images/flyer2.PNG
-Giving Back Website/Images/flyer3.PNG
-Giving Back Website/Images/packages.jpg
-Giving Back Website/Images/pink.jpg
-Giving Back Website/Images/white.jpg
-Giving Back Website/index.html
-Giving Back Website/sign_up.html
-Giving Back Website/sign_up_form.html
-Giving Back Website/stylesheet.css
-Giving Back Website/Vue.js
+/bin/
+.classpath
+.project
+.gitignore
