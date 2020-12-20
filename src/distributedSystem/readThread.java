@@ -2,34 +2,32 @@ package distributedSystem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
 
-public class readThread extends Thread{
-	
+public class readThread extends Thread {
+
 	//fields
 	BufferedReader responseReader;
-	
-	public readThread(BufferedReader responseReader) {
+	IntegerWrapper clientID;
+
+	public readThread(BufferedReader responseReader, IntegerWrapper clientID) {
 		this.responseReader = responseReader;
+		this.clientID = clientID;
+
 	}
-	
+
 	public void run() {
-		
-		try{
+
+		try {
+			clientID.anInt = Integer.parseInt(responseReader.readLine());
 			String response = responseReader.readLine();
-			
-			while(response != null) {
+
+			while (response != null) {
 				System.out.println(response);
-				
+
 				response = responseReader.readLine();
 			}
-		}
-		catch(IOException e) {
-			 System.err.println("Couldn't get I/O connection.");
+		} catch (IOException e) {
+			System.err.println("Couldn't get I/O connection.");
 		}
 	}
 }

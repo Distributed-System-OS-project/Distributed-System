@@ -1,9 +1,10 @@
 package distributedSystem;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Slave {
 	public static void main(String[] args) {
@@ -19,13 +20,14 @@ public class Slave {
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
+			out.print(optimizedTask);
 
-			while (in.available() == 0 ) {
+
+			while (in.available() == 0) { //not sure if correct
 				job = (Job) in.readObject();
 				if (job.getOptimizedTask() == optimizedTask) {
 					Thread.sleep(2000);
-				}
-				else {
+				} else {
 					Thread.sleep(10000);
 				}
 				out.print(1);
