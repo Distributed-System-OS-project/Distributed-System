@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.slave;
+
+import distributedSystem.Job;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

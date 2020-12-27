@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.client;
+
+import distributedSystem.IntegerWrapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;

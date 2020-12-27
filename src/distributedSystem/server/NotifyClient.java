@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.server;
+
+import distributedSystem.Job;
 
 import java.util.ArrayList;
 import java.util.Queue;

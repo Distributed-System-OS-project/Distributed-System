@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.client;
+
+import distributedSystem.IntegerWrapper;
 
 import java.io.*;
 import java.net.InetAddress;

@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.server;
+
+import distributedSystem.Job;
 
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;

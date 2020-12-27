@@ -1,4 +1,6 @@
-package distributedSystem;
+package distributedSystem.server;
+
+import distributedSystem.Job;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,7 +14,7 @@ public class Server {
 		try {
 			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0]));
 
-			Queue<Job> readyJobs = new LinkedList();
+			Queue<Job> readyJobs = new LinkedList<>();
 			Queue<Job> completedJobs = new LinkedList<>();
 
 			ArrayList<ClientHandler> clients = new ArrayList<>();
