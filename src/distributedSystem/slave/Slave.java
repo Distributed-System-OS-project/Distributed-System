@@ -22,7 +22,7 @@ public class Slave {
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-			out.print(optimizedTask);
+			out.println(optimizedTask);
 
 
 			while (in.available() == 0) { //not sure if correct

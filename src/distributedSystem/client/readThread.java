@@ -9,27 +9,25 @@ public class readThread extends Thread {
 
 	//fields
 	BufferedReader responseReader;
-	IntegerWrapper clientID;
 
-	public readThread(BufferedReader responseReader, IntegerWrapper clientID) {
+	public readThread(BufferedReader responseReader) {
 		this.responseReader = responseReader;
-		this.clientID = clientID;
 
 	}
 
 	public void run() {
 
 		try {
-			clientID.anInt = Integer.parseInt(responseReader.readLine());
-			String response = responseReader.readLine();
 
-			while (response != null) {
-				System.out.println(response);
+			String response;
 
+			while (true) {
 				response = responseReader.readLine();
+				System.out.println(response);
 			}
+
 		} catch (IOException e) {
-			System.err.println("Couldn't get I/O connection.");
+			System.err.println("Couldn't get I/O connection in readThread.");
 		}
 	}
 }

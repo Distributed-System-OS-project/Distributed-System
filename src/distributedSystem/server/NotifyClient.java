@@ -22,7 +22,7 @@ public class NotifyClient extends Thread {
 				nextJob = completedJobs.remove();
 				for (ClientHandler client : clients) {
 					if (nextJob.getClientID() == client.clientID) {
-						client.clientWriter.println("Job number " + nextJob.getJobID() + " has been completed.");
+						client.writeToClient("Job number " + nextJob.getJobID() + " has been completed.");
 					}
 				}
 			}

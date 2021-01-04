@@ -20,10 +20,11 @@ class ClientListener extends Thread {
 		this.readyJobs = readyJobs;
 		this.serverSocket = serverSocket;
 		clientID = MIN_CLIENT_ID;
+		this.clients = clients;
 	}
 
 	public void run() {
-
+		System.out.println("Started ClientListener thread.");
 
 		while (true) {
 
@@ -32,15 +33,18 @@ class ClientListener extends Thread {
 				synchronized (serverSocket) {
 					socket = serverSocket.accept();
 				}
-				System.out.println("connection Established");
+				System.out.println("Connection Established with client " + (clientID + 1));
 
 				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-				PrintWriter out = new PrintWriter(socket.getOutputStream());
+				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-				out.print(clientID++);
+				out.println(++clientID);
+				System.out.println("assigned clientID to client " + (clientID));
 
 				ClientHandler client = new ClientHandler(in, out, clientID, readyJobs);
+				clients.add(client);
 
+				System.out.println("Added client " + clientID + " to client list");
 
 			} catch (Exception e) {
 				e.printStackTrace();

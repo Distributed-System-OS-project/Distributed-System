@@ -2,6 +2,7 @@ package distributedSystem.server;
 
 import distributedSystem.Job;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ public class SlaveHandler {
 	Queue<Job> completedJobs;
 
 
-	public SlaveHandler(DataInputStream in, ObjectOutputStream out, char optimizedTask, Queue<Job> completedJobs) {
+	public SlaveHandler(BufferedReader in, ObjectOutputStream out, char optimizedTask, Queue<Job> completedJobs) {
 		slaveID = minimumID++;
 		this.optimizedTask = optimizedTask;
 		waitingJobs = new LinkedList<>();

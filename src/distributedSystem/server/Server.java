@@ -9,31 +9,43 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Server {
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 
 		try {
-			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0]));
+			ServerSocket clientSocket = new ServerSocket(Integer.parseInt(args[0]));
+			ServerSocket slaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 
 			Queue<Job> readyJobs = new LinkedList<>();
 			Queue<Job> completedJobs = new LinkedList<>();
 
-			ArrayList<ClientHandler> clients = new ArrayList<>();
-			ArrayList<SlaveHandler> slaves = new ArrayList<>();
+			System.out.println("Initialized Job queues");
 
-			Thread clientListener = new ClientListener(serverSocket, clients, readyJobs);
-			Thread slaveListener = new SlaveListener(serverSocket, slaves, completedJobs);
+			ArrayList<ClientHandler> clients = new ArrayList<>();
+			System.out.println("Initialized clients list");
+			ArrayList<SlaveHandler> slaves = new ArrayList<>();
+			System.out.println("Initialized slaves list");
+
+			Thread clientListener = new ClientListener(clientSocket, clients, readyJobs);
+			Thread slaveListener = new SlaveListener(slaveSocket, slaves, completedJobs);
 			Thread notifyClient = new NotifyClient(clients, completedJobs);
+
+			System.out.println("Initialized threads");
 
 			clientListener.start();
 			slaveListener.start();
 			notifyClient.start();
 
+			System.out.println("Started threads");
+
+			Job nextJob;
+
 			while (true) {
-				Job nextJob;
+
 
 				if (!readyJobs.isEmpty()) {
 					synchronized (readyJobs) {
 						nextJob = readyJobs.remove();
+						System.out.println("Received job " + nextJob.toString());
 					}
 
 					char jobType = nextJob.getOptimizedTask();

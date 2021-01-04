@@ -1,6 +1,14 @@
 package distributedSystem;
 
 public class IntegerWrapper {
-	public int anInt;
+	int num;
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getNum(){
+		return this.num;
+	}
 
 }

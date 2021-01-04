@@ -17,11 +17,11 @@ public class ClientHandler {
 		clientCommunicationThread.start();
 
 		this.clientWriter = out;
-
 		this.clientID = clientID;
 	}
 
 	public void writeToClient(String message) {
+		clientWriter.println(message);
 	}
 
 

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class writeThread extends Thread {
 
@@ -31,19 +32,19 @@ public class writeThread extends Thread {
 
 				while (description != null) {
 
-					System.out.println("The process was sent to the processor");
-
-					Job j = new Job(description, clientID.anInt);
+					Job j = new Job(description, clientID.getNum());
+					System.out.println("Starting a new Job with description " + description + " and clientID " + clientID.getNum());
 
 					//write to server
 					requestWriter.writeObject(j);
+					System.out.println("The process was sent to the processor");
 
 					System.out.print("Describe the process that you want to be executed: ");
 					description = stdIn.readLine();
 				}
 			}
 		} catch (IOException e) {
-			System.err.println("Couldn't get I/O connection.");
+			System.err.println("Couldn't get I/O connection in writeThread.");
 		}
 	}
 }

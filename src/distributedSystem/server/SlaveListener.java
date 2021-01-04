@@ -2,9 +2,7 @@ package distributedSystem.server;
 
 import distributedSystem.Job;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class SlaveListener extends Thread {
 
 	@Override
 	public void run() {
+		System.out.println("Started SlaveListener thread.");
 		while (true) {
 
 			try {
@@ -31,13 +30,20 @@ public class SlaveListener extends Thread {
 				synchronized (serverSocket) {
 					socket = serverSocket.accept();
 				}
-				DataInputStream in = new DataInputStream(socket.getInputStream());
+				System.out.println("Connection established with slave.");
+
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-				char optimizedTask = in.readChar();
+				System.out.println("Input streams for slave established.");
+
+				char optimizedTask = in.readLine().charAt(0);
+				System.out.println("recieved optimized task from slave: " + optimizedTask); //remove later
 
 				SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
 				slaves.add(slave);
+
+				System.out.println("Added slave to slaves list");
 
 			} catch (IOException e) {
 				e.printStackTrace();

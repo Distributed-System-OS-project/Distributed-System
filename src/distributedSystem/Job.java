@@ -1,8 +1,9 @@
 package distributedSystem;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Job {
+public class Job implements Serializable {
 	private int jobID;
 	private String description;
 	private char optimizedTask;
@@ -15,7 +16,7 @@ public class Job {
 		this.description = description;
 
 		Random r = new Random();
-		int num = r.nextInt(1);
+		int num = r.nextInt(2);
 
 		if (num == 0)
 			this.optimizedTask = 'A';
@@ -47,6 +48,7 @@ public class Job {
 		str.append("Job ID: " + getJobID());
 		str.append("\nDescription: " + getDescription());
 		str.append("\nOptimized Task: " + getOptimizedTask());
+		str.append("\nClient ID: " + getClientID());
 		return str.toString();
 	}
 }

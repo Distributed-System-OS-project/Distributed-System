@@ -28,13 +28,25 @@ public class Client {
 						new BufferedReader(
 								new InputStreamReader(System.in));
 		) {
+			System.out.println("Opened necessary streams.");
 
-			Thread read = new readThread(responseReader, clientID);
+			clientID.setNum(Integer.parseInt(responseReader.readLine()));
+
+			System.out.println("Received clientID " + clientID.getNum());
+
+			Thread read = new readThread(responseReader);
+			System.out.println("Initialized read thread.");
 
 			Thread write = new writeThread(requestWriter, stdIn, clientID);
+			System.out.println("Initialized write thread.");
 
 			read.start();
+			System.out.println("Started read thread."); //remove later
 			write.start();
+			System.out.println("Started write thread."); //remove later
+
+			read.join();
+			write.join();
 
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host.");
@@ -42,6 +54,8 @@ public class Client {
 		} catch (IOException e) {
 			System.err.println("Couldn't get I/O for the connection.");
 			System.exit(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }
