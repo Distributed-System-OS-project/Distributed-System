@@ -34,15 +34,11 @@ public class SlaveCommunicationThread extends Thread {
 				}
 				try {
 					out.writeObject(nextJob);
-					System.out.println("sent job number " + nextJob.getJobID() +
-							" to slave number " + parentSlave.getSlaveID());
 					while (Integer.parseInt(in.readLine()) != 1) {
 						sleep(100);
 					}
 					synchronized (completedJobs) {
 						completedJobs.add(nextJob);
-						System.out.println("slave number " + parentSlave.getSlaveID() +
-								" received confirmation that job number " + nextJob.getJobID() + " has completed");
 					}
 					parentSlave.completeJob(nextJob);
 

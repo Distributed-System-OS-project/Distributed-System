@@ -1,5 +1,6 @@
 package distributedSystem.server;
 
+import distributedSystem.IntegerWrapper;
 import distributedSystem.Job;
 
 import java.io.ObjectInputStream;
@@ -16,11 +17,14 @@ class ClientListener extends Thread {
 	final int MIN_CLIENT_ID = 0;
 	static int clientID;
 
-	public ClientListener(ServerSocket serverSocket, ArrayList<ClientHandler> clients, Queue<Job> readyJobs) {
+	IntegerWrapper maxJobID;
+
+	public ClientListener(ServerSocket serverSocket, ArrayList<ClientHandler> clients, Queue<Job> readyJobs, IntegerWrapper maxJobID) {
 		this.readyJobs = readyJobs;
 		this.serverSocket = serverSocket;
 		clientID = MIN_CLIENT_ID;
 		this.clients = clients;
+		this.maxJobID = maxJobID;
 	}
 
 	public void run() {
@@ -41,14 +45,14 @@ class ClientListener extends Thread {
 				out.println(++clientID);
 				System.out.println("assigned clientID to client " + (clientID));
 
-				ClientHandler client = new ClientHandler(in, out, clientID, readyJobs);
+				ClientHandler client = new ClientHandler(in, out, clientID, readyJobs, maxJobID);
 				clients.add(client);
 
 				System.out.println("Added client " + clientID + " to client list");
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Connection Error");
+				System.err.println("Connection Error");
 
 			}
 		}

@@ -38,7 +38,6 @@ public class SlaveListener extends Thread {
 				System.out.println("Input streams for slave established.");
 
 				char optimizedTask = in.readLine().charAt(0);
-				System.out.println("recieved optimized task from slave: " + optimizedTask); //remove later
 
 				SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
 				slaves.add(slave);

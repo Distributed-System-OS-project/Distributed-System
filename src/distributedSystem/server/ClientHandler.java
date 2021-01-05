@@ -1,5 +1,6 @@
 package distributedSystem.server;
 
+import distributedSystem.IntegerWrapper;
 import distributedSystem.Job;
 
 import java.io.ObjectInputStream;
@@ -12,8 +13,8 @@ public class ClientHandler {
 	PrintWriter clientWriter;
 	int clientID;
 
-	public ClientHandler(ObjectInputStream in, PrintWriter out, int clientID, Queue<Job> readyJobs) {
-		clientCommunicationThread = new ClientCommunicationThread(in, readyJobs);
+	public ClientHandler(ObjectInputStream in, PrintWriter out, int clientID, Queue<Job> readyJobs, IntegerWrapper maxJobID) {
+		clientCommunicationThread = new ClientCommunicationThread(in, readyJobs, maxJobID);
 		clientCommunicationThread.start();
 
 		this.clientWriter = out;
@@ -22,7 +23,6 @@ public class ClientHandler {
 
 	public void writeToClient(String message) {
 		clientWriter.println(message);
-		System.out.println("Sent message to client: " + message);
 	}
 
 

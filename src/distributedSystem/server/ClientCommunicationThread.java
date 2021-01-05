@@ -1,5 +1,6 @@
 package distributedSystem.server;
 
+import distributedSystem.IntegerWrapper;
 import distributedSystem.Job;
 
 import java.io.IOException;
@@ -11,10 +12,12 @@ class ClientCommunicationThread extends Thread {
 
 	ObjectInputStream in;
 	final Queue<Job> readyJobs;
+	IntegerWrapper maxJobID;
 
-	public ClientCommunicationThread(ObjectInputStream in, Queue<Job> readyJobs) {
+	public ClientCommunicationThread(ObjectInputStream in, Queue<Job> readyJobs, IntegerWrapper maxJobID) {
 		this.in = in;
 		this.readyJobs = readyJobs;
+		this.maxJobID = maxJobID;
 	}
 
 	public void run() {
@@ -33,6 +36,12 @@ class ClientCommunicationThread extends Thread {
 			while (object != null) {
 				if (object instanceof Job) {
 					job = (Job) object;
+					int jobID;
+					synchronized (maxJobID) {
+						jobID = maxJobID.getNum();
+						maxJobID.setNum(jobID+1);
+					}
+					job.setJobID(jobID);
 					System.out.println("Job received: " + job.toString());
 					synchronized (readyJobs) {
 						readyJobs.add(job);

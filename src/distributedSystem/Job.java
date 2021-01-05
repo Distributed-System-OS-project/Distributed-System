@@ -9,10 +9,7 @@ public class Job implements Serializable {
 	private char optimizedTask;
 	private int clientID;
 
-	private static int IDnum = 0;
-
 	public Job(String description, int clientID) {
-		this.jobID = ++IDnum;
 		this.description = description;
 
 		Random r = new Random();
@@ -40,6 +37,10 @@ public class Job implements Serializable {
 
 	public int getClientID() {
 		return this.clientID;
+	}
+
+	public void setJobID(int jobID) {
+		this.jobID = jobID;
 	}
 
 	@Override

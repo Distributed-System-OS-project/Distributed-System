@@ -1,5 +1,6 @@
 package distributedSystem.server;
 
+import distributedSystem.IntegerWrapper;
 import distributedSystem.Job;
 
 import java.io.IOException;
@@ -20,16 +21,16 @@ public class Server {
 		ArrayList<SlaveHandler> slaves = new ArrayList<>();
 		System.out.println("Initialized slaves list");
 
+		IntegerWrapper maxJobID = new IntegerWrapper(0);
+
 		try {
 			ServerSocket clientSocket = new ServerSocket(Integer.parseInt(args[0]));
 			ServerSocket slaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 
 
-			Thread clientListener = new ClientListener(clientSocket, clients, readyJobs);
+			Thread clientListener = new ClientListener(clientSocket, clients, readyJobs, maxJobID);
 			Thread slaveListener = new SlaveListener(slaveSocket, slaves, completedJobs);
 			Thread notifyClient = new NotifyClient(clients, completedJobs);
-
-			System.out.println("Initialized threads");
 
 			clientListener.start();
 			slaveListener.start();
@@ -41,7 +42,6 @@ public class Server {
 
 			while (true) {
 				if ( ! readyJobs.isEmpty()) {
-					System.out.println("Ready Jobs: " + readyJobs);
 					synchronized (readyJobs) {
 						nextJob = readyJobs.remove();
 						System.out.println("Received job " + nextJob.toString());
