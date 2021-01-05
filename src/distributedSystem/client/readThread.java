@@ -24,9 +24,10 @@ public class readThread extends Thread {
 			while (true) {
 				response = responseReader.readLine();
 				System.out.println(response);
+				sleep(100);
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			System.err.println("Couldn't get I/O connection in readThread.");
 		}
 	}
