@@ -21,19 +21,22 @@ public class Slave {
 			Socket socket = new Socket(InetAddress.getLocalHost(), portNumber);
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			System.out.println("Created I/O streams");
 
 			out.println(optimizedTask);
+			System.out.println("Sent optimized task to server");
 
 
-			while (in.available() == 0) { //not sure if correct
+			while (true) { //not sure if correct
 				job = (Job) in.readObject();
+				System.out.println("Received job number " + job.getJobID());
 				if (job.getOptimizedTask() == optimizedTask) {
 					Thread.sleep(2000);
 				} else {
 					Thread.sleep(10000);
 				}
-				out.print(1);
-				job = null;
+				out.println(1);
+				System.out.println("Completed job number " + job.getJobID());
 			}
 
 		} catch (IOException | ClassNotFoundException | InterruptedException e) {

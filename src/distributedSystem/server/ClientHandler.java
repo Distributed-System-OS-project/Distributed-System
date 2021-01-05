@@ -22,6 +22,7 @@ public class ClientHandler {
 
 	public void writeToClient(String message) {
 		clientWriter.println(message);
+		System.out.println("Sent message to client: " + message);
 	}
 
 

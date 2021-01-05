@@ -25,21 +25,35 @@ public class SlaveCommunicationThread extends Thread {
 
 	@Override
 	public void run() {
+		Job nextJob;
 		while (true) {
-			if (!waitingJobs.isEmpty()) {
-				Job nextJob;
+			if (! waitingJobs.isEmpty()) {
+
 				synchronized (waitingJobs) {
 					nextJob = waitingJobs.remove();
 				}
 				try {
 					out.writeObject(nextJob);
-					while (Integer.parseInt(in.readLine()) != 1) ;
+					System.out.println("sent job number " + nextJob.getJobID() +
+							" to slave number " + parentSlave.getSlaveID());
+					while (Integer.parseInt(in.readLine()) != 1) {
+						sleep(100);
+					}
 					synchronized (completedJobs) {
 						completedJobs.add(nextJob);
+						System.out.println("slave number " + parentSlave.getSlaveID() +
+								" received confirmation that job number " + nextJob.getJobID() + " has completed");
 					}
 					parentSlave.completeJob(nextJob);
 
-				} catch (IOException e) {
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else {
+				try {
+					sleep(100);
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

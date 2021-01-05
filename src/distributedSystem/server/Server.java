@@ -11,19 +11,19 @@ import java.util.Queue;
 public class Server {
 	public static void main(String[] args) {
 
+		Queue<Job> readyJobs = new LinkedList<>();
+		Queue<Job> completedJobs = new LinkedList<>();
+		System.out.println("Initialized Job queues");
+
+		ArrayList<ClientHandler> clients = new ArrayList<>();
+		System.out.println("Initialized clients list");
+		ArrayList<SlaveHandler> slaves = new ArrayList<>();
+		System.out.println("Initialized slaves list");
+
 		try {
 			ServerSocket clientSocket = new ServerSocket(Integer.parseInt(args[0]));
 			ServerSocket slaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 
-			Queue<Job> readyJobs = new LinkedList<>();
-			Queue<Job> completedJobs = new LinkedList<>();
-
-			System.out.println("Initialized Job queues");
-
-			ArrayList<ClientHandler> clients = new ArrayList<>();
-			System.out.println("Initialized clients list");
-			ArrayList<SlaveHandler> slaves = new ArrayList<>();
-			System.out.println("Initialized slaves list");
 
 			Thread clientListener = new ClientListener(clientSocket, clients, readyJobs);
 			Thread slaveListener = new SlaveListener(slaveSocket, slaves, completedJobs);
@@ -40,9 +40,8 @@ public class Server {
 			Job nextJob;
 
 			while (true) {
-
-
-				if (!readyJobs.isEmpty()) {
+				if ( ! readyJobs.isEmpty()) {
+					System.out.println("Ready Jobs: " + readyJobs);
 					synchronized (readyJobs) {
 						nextJob = readyJobs.remove();
 						System.out.println("Received job " + nextJob.toString());
@@ -81,13 +80,15 @@ public class Server {
 					//at this point it found the shortest queue
 					//so it will add the nextJob to the shortest queue
 					minQ.addJob(nextJob);
-
-
-
+					System.out.println("assigned job number " + nextJob.getJobID() +
+							" to slave number " + minQ.getSlaveID());
 
 				}
+				else {
+					Thread.sleep(100); // if this is not in place the server's other threads don't get any CPU time.
+				}
 			}
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 
