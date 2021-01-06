@@ -10,43 +10,69 @@ import java.util.Queue;
 
 public class SlaveListener extends Thread {
 
-	private ServerSocket serverSocket;
-	private ArrayList<SlaveHandler> slaves;
-	private Queue<Job> completedJobs;
+    ServerSocket serverSocket;
+    static ArrayList<SlaveHandler> slaves;
+    static Queue<Job> completedJobs;
+    static Queue<Job> readyJobs;
 
-	public SlaveListener(ServerSocket serverSocket, ArrayList<SlaveHandler> slaves, Queue<Job> completedJobs) {
-		this.serverSocket = serverSocket;
-		this.slaves = slaves;
-		this.completedJobs = completedJobs;
-	}
+    public SlaveListener(ServerSocket serverSocket, ArrayList<SlaveHandler> slaves, Queue<Job> completedJobs, Queue<Job> readyJobs) {
+        this.serverSocket = serverSocket;
+        this.slaves = slaves;
+        this.completedJobs = completedJobs;
+        this.readyJobs = readyJobs;
+    }
 
-	@Override
-	public void run() {
-		System.out.println("Started SlaveListener thread.");
-		while (true) {
+    @Override
+    public void run() {
+        System.out.println("Started SlaveListener thread.");
+        while (true) {
 
-			try {
-				Socket socket;
-				synchronized (serverSocket) {
-					socket = serverSocket.accept();
-				}
-				System.out.println("Connection established with slave.");
+            try {
+                Socket socket;
+                synchronized (serverSocket) {
+                    socket = serverSocket.accept();
+                }
+                System.out.println("Connection established with slave.");
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                socket.setSoTimeout(11000);
 
-				System.out.println("Input streams for slave established.");
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-				char optimizedTask = in.readLine().charAt(0);
+                System.out.println("Input streams for slave established.");
 
-				SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
-				slaves.add(slave);
+                char optimizedTask = in.readLine().charAt(0);
 
-				System.out.println("Added slave to slaves list");
+                SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
+                slaves.add(slave);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+                System.out.println("Added slave to slaves list");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void removeSlave(SlaveHandler slave, Job jobInProgress) {
+        try {
+            slave.comm.in.close();
+            slave.comm.out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        synchronized (readyJobs) {
+            readyJobs.add(jobInProgress);
+        }
+        Job job;
+        while (!slave.waitingJobs.isEmpty()) {
+            job = slave.waitingJobs.remove();
+            synchronized (readyJobs) {
+                readyJobs.add(job);
+            }
+        }
+        slaves.remove(slave);
+        System.out.println("Client number " + slave.slaveID + " has disconnected.");
+    }
 }

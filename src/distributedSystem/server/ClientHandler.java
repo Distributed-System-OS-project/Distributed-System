@@ -9,21 +9,21 @@ import java.util.Queue;
 
 public class ClientHandler {
 
-	ClientCommunicationThread clientCommunicationThread;
-	PrintWriter clientWriter;
-	int clientID;
+    ClientCommunicationThread clientCommunicationThread;
+    PrintWriter clientWriter;
+    int clientID;
 
-	public ClientHandler(ObjectInputStream in, PrintWriter out, int clientID, Queue<Job> readyJobs, IntegerWrapper maxJobID) {
-		clientCommunicationThread = new ClientCommunicationThread(in, readyJobs, maxJobID);
-		clientCommunicationThread.start();
+    public ClientHandler(ObjectInputStream in, PrintWriter out, int clientID, Queue<Job> readyJobs, IntegerWrapper maxJobID) {
+        clientCommunicationThread = new ClientCommunicationThread(in, readyJobs, maxJobID, this);
+        clientCommunicationThread.start();
 
-		this.clientWriter = out;
-		this.clientID = clientID;
-	}
+        this.clientWriter = out;
+        this.clientID = clientID;
+    }
 
-	public void writeToClient(String message) {
-		clientWriter.println(message);
-	}
+    public void writeToClient(String message) {
+        clientWriter.println(message);
+    }
 
 
 }

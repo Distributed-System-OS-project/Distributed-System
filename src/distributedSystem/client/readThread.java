@@ -7,28 +7,28 @@ import java.io.IOException;
 
 public class readThread extends Thread {
 
-	//fields
-	BufferedReader responseReader;
+    //fields
+    BufferedReader responseReader;
 
-	public readThread(BufferedReader responseReader) {
-		this.responseReader = responseReader;
+    public readThread(BufferedReader responseReader) {
+        this.responseReader = responseReader;
 
-	}
+    }
 
-	public void run() {
+    public void run() {
 
-		try {
+        try {
 
-			String response;
+            String response;
 
-			while (true) {
-				response = responseReader.readLine();
-				System.out.println(response);
-				sleep(100);
-			}
+            while (true) {
+                response = responseReader.readLine();
+                System.out.println(response);
+                sleep(100);
+            }
 
-		} catch (IOException | InterruptedException e) {
-			System.err.println("Couldn't get I/O connection in readThread.");
-		}
-	}
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Couldn't get I/O connection in readThread.");
+        }
+    }
 }
