@@ -41,7 +41,6 @@ public class SlaveCommunicationThread extends Thread {
                     parentSlave.completeJob(nextJob);
 
                 } catch (IOException | NumberFormatException e) { //throws NumberFormatException when Slave gets disconnected in the middle of processing something.
-                    System.out.println("Slave number " + parentSlave.getSlaveID() + " has disconnected.");
                     SlaveListener.removeSlave(parentSlave, nextJob);
 
                 } catch (InterruptedException e) {

@@ -47,8 +47,18 @@ public class Server {
                     }
                     System.out.println("Received job " + nextJob.toString());
 
+                    if (slaves.isEmpty()) {
+                        for (ClientHandler c: clients) {
+                            if (c.clientID == nextJob.getClientID()) {
+                                c.writeToClient("No slaves available to take this task. Please try again later.");
+                            }
+                        }
+                        Thread.sleep(1000);
+                        continue;
+                    }
+
                     char jobType = nextJob.getOptimizedTask();
-                    
+
                     int minWaitTime = slaves.get(0).getTimeToComplete();
 
                     if (slaves.get(0).getOptimizedTask() == jobType)

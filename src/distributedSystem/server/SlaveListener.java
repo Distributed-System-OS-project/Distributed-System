@@ -5,6 +5,7 @@ import distributedSystem.Job;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -58,6 +59,8 @@ public class SlaveListener extends Thread {
         try {
             slave.comm.in.close();
             slave.comm.out.close();
+        } catch (SocketException e) {
+            System.err.println("Socket already closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,6 +76,6 @@ public class SlaveListener extends Thread {
             }
         }
         slaves.remove(slave);
-        System.out.println("Client number " + slave.slaveID + " has disconnected.");
+        System.out.println("Slave number " + slave.slaveID + " has disconnected.");
     }
 }
