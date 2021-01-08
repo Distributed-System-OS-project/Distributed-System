@@ -32,7 +32,6 @@ public class writeThread extends Thread {
                 while (description != null) {
 
                     Job j = new Job(description, clientID.getNum());
-                    System.out.println("Starting a new Job with description " + description + " and clientID " + clientID.getNum());
 
                     //write to server
                     requestWriter.writeObject(j);

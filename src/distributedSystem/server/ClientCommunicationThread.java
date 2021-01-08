@@ -34,7 +34,6 @@ class ClientCommunicationThread extends Thread {
                 if (job == null) {
                     connected = false;
                     ClientListener.removeClient(parent);
-
                     break;
                 }
             } catch (EOFException e) {
@@ -52,7 +51,6 @@ class ClientCommunicationThread extends Thread {
             }
             job.setJobID(jobID);
             parent.writeToClient("Job: " + job.getJobID() + "\tDescription: " + job.getDescription());
-            System.out.println("Job received: " + job.toString());
             synchronized (readyJobs) {
                 readyJobs.add(job);
             }
