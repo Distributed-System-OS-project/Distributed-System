@@ -51,6 +51,7 @@ class ClientCommunicationThread extends Thread {
                 maxJobID.setNum(jobID + 1);
             }
             job.setJobID(jobID);
+            parent.writeToClient("Job: " + job.getJobID() + "\tDescription: " + job.getDescription());
             System.out.println("Job received: " + job.toString());
             synchronized (readyJobs) {
                 readyJobs.add(job);

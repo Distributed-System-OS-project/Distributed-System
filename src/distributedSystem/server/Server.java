@@ -69,7 +69,7 @@ public class Server {
                     //assigns the first queue to be the shortest (for now)
                     SlaveHandler minQ = slaves.get(0);
 
-                    //go thru slaves and compare wait times to find shortest queue
+                    //go through slaves and compare wait times to find shortest queue
                     for (int i = 1; i < slaves.size(); i++) {
 
                         int waitTime = slaves.get(i).getTimeToComplete();
