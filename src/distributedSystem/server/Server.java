@@ -48,7 +48,7 @@ public class Server {
                     System.out.println("Received job " + nextJob.toString());
 
                     if (slaves.isEmpty()) {
-                        for (ClientHandler c: clients) {
+                        for (ClientHandler c : clients) {
                             if (c.clientID == nextJob.getClientID()) {
                                 c.writeToClient("No slaves available to take this task. Please try again later.");
                             }
