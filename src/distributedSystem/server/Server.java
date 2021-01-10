@@ -36,7 +36,7 @@ public class Server {
             slaveListener.start();
             notifyClient.start();
 
-            System.out.println("Started threads");
+            System.out.println("Started threads\n");
 
             Job nextJob;
 
@@ -45,7 +45,8 @@ public class Server {
                     synchronized (readyJobs) {
                         nextJob = readyJobs.remove();
                     }
-                    System.out.println("Received job " + nextJob.toString());
+                    System.out.println("***\nReceived job\n" + nextJob.toString());
+                    System.out.println("***\n");
 
                     if (slaves.isEmpty()) {
                         for (ClientHandler c : clients) {
@@ -67,7 +68,7 @@ public class Server {
                         minWaitTime += 10;
 
                     //assigns the first queue to be the shortest (for now)
-                    SlaveHandler minQ = slaves.get(0);
+                    SlaveHandler shortestQueue = slaves.get(0);
 
                     //go through slaves and compare wait times to find shortest queue
                     for (int i = 1; i < slaves.size(); i++) {
@@ -82,15 +83,15 @@ public class Server {
 
                         if (waitTime < minWaitTime) {
                             minWaitTime = waitTime;
-                            minQ = slaves.get(i);
+                            shortestQueue = slaves.get(i);
                         }
                     }
 
                     //at this point it found the shortest queue
                     //so it will add the nextJob to the shortest queue
-                    minQ.addJob(nextJob);
+                    shortestQueue.addJob(nextJob);
                     System.out.println("assigned job number " + nextJob.getJobID() +
-                            " to slave number " + minQ.getSlaveID());
+                            " to slave number " + shortestQueue.getSlaveID() + "\n--" + shortestQueue.getTimeToComplete() + "seconds to complete.\n" );
 
                 } else {
                     Thread.sleep(100); // if this is not in place the server's other threads don't get any CPU time.

@@ -47,7 +47,7 @@ public class SlaveListener extends Thread {
                 SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
                 slaves.add(slave);
 
-                System.out.println("Added slave to slaves list");
+                System.out.println("Added slave to slaves list\n");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -76,6 +76,6 @@ public class SlaveListener extends Thread {
             }
         }
         slaves.remove(slave);
-        System.out.println("Slave number " + slave.slaveID + " has disconnected.");
+        System.out.println("Slave number " + slave.slaveID + " has disconnected.\n");
     }
 }

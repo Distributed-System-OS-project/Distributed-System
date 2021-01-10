@@ -54,7 +54,6 @@ class ClientCommunicationThread extends Thread {
             synchronized (readyJobs) {
                 readyJobs.add(job);
             }
-            System.out.println("Added job number " + job.getJobID() + " to readyJobs list");
 
 
         } while (connected);

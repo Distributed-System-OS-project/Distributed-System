@@ -49,7 +49,7 @@ class ClientListener extends Thread {
                 ClientHandler client = new ClientHandler(in, out, clientID, readyJobs, maxJobID);
                 clients.add(client);
 
-                System.out.println("Added client " + clientID + " to client list");
+                System.out.println("Added client " + clientID + " to client list\n");
 
             } catch (Exception e) {
                 e.printStackTrace();
