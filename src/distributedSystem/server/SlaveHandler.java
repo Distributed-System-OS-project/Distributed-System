@@ -51,6 +51,7 @@ public class SlaveHandler {
         synchronized (completedJobs) {
             completedJobs.add(job);
         }
+        System.out.println("Job number " + job.getJobID() + " has been completed.\n");
     }
 
     public int getSlaveID() {
