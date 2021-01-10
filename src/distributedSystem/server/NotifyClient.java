@@ -26,7 +26,7 @@ public class NotifyClient extends Thread {
                 for (ClientHandler client : clients) {
                     if (nextJob.getClientID() == client.clientID) {
                         client.writeToClient("Job number " + nextJob.getJobID() + " has been completed.");
-                        System.out.println("Client has been notified that job number " + nextJob.getJobID());
+                        System.out.println("Client has been notified that job number " + nextJob.getJobID() + " has been completed.\n");
                         clientFound = true;
                         break;
                     }
