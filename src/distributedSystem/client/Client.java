@@ -13,11 +13,12 @@ public class Client {
 
         IntegerWrapper clientID = new IntegerWrapper();
 
-        int portNumber = Integer.parseInt(args[0]);
+        String hostName = args[0];
+        int portNumber = Integer.parseInt(args[1]);
 
 
         try (
-                Socket clientSocket = new Socket(InetAddress.getLocalHost(), portNumber);
+                Socket clientSocket = new Socket(hostName, portNumber);
 
                 ObjectOutputStream requestWriter = // stream to write text requests to server
                         new ObjectOutputStream(clientSocket.getOutputStream());

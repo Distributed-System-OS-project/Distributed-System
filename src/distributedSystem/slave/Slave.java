@@ -12,13 +12,13 @@ public class Slave {
     public static void main(String[] args) {
 
         char optimizedTask = args[0].toUpperCase().charAt(0);
-
-        int portNumber = Integer.parseInt(args[1]);
+        String hostName = args[1];
+        int portNumber = Integer.parseInt(args[2]);
 
         Job job;
 
         try {
-            Socket socket = new Socket(InetAddress.getLocalHost(), portNumber);
+            Socket socket = new Socket(hostName, portNumber);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Created I/O streams");
