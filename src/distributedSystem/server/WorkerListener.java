@@ -9,23 +9,23 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Queue;
 
-public class SlaveListener extends Thread {
+public class WorkerListener extends Thread {
 
     ServerSocket serverSocket;
-    static ArrayList<SlaveHandler> slaves;
+    static ArrayList<WorkerHandler> workers;
     static Queue<Job> completedJobs;
     static Queue<Job> readyJobs;
 
-    public SlaveListener(ServerSocket serverSocket, ArrayList<SlaveHandler> slaves, Queue<Job> completedJobs, Queue<Job> readyJobs) {
+    public WorkerListener(ServerSocket serverSocket, ArrayList<WorkerHandler> workers, Queue<Job> completedJobs, Queue<Job> readyJobs) {
         this.serverSocket = serverSocket;
-        this.slaves = slaves;
+        this.workers = workers;
         this.completedJobs = completedJobs;
         this.readyJobs = readyJobs;
     }
 
     @Override
     public void run() {
-        System.out.println("Started SlaveListener thread.");
+        System.out.println("Started WorkerListener thread.");
         while (true) {
 
             try {
@@ -33,21 +33,21 @@ public class SlaveListener extends Thread {
                 synchronized (serverSocket) {
                     socket = serverSocket.accept();
                 }
-                System.out.println("Connection established with slave.");
+                System.out.println("Connection established with worker.");
 
                 socket.setSoTimeout(11000);
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-                System.out.println("Input streams for slave established.");
+                System.out.println("Input streams for worker established.");
 
                 char optimizedTask = in.readLine().charAt(0);
 
-                SlaveHandler slave = new SlaveHandler(in, out, optimizedTask, completedJobs);
-                slaves.add(slave);
+                WorkerHandler worker = new WorkerHandler(in, out, optimizedTask, completedJobs);
+                workers.add(worker);
 
-                System.out.println("Added slave to slaves list\n");
+                System.out.println("Added worker to workers list\n");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -55,10 +55,10 @@ public class SlaveListener extends Thread {
         }
     }
 
-    public static void removeSlave(SlaveHandler slave, Job jobInProgress) {
+    public static void removeWorker(WorkerHandler worker, Job jobInProgress) {
         try {
-            slave.comm.in.close();
-            slave.comm.out.close();
+            worker.comm.in.close();
+            worker.comm.out.close();
         } catch (SocketException e) {
             System.err.println("Socket already closed.");
         } catch (IOException e) {
@@ -69,13 +69,13 @@ public class SlaveListener extends Thread {
             readyJobs.add(jobInProgress);
         }
         Job job;
-        while (!slave.waitingJobs.isEmpty()) {
-            job = slave.waitingJobs.remove();
+        while (!worker.waitingJobs.isEmpty()) {
+            job = worker.waitingJobs.remove();
             synchronized (readyJobs) {
                 readyJobs.add(job);
             }
         }
-        slaves.remove(slave);
-        System.out.println("Slave number " + slave.slaveID + " has disconnected.\n");
+        workers.remove(worker);
+        System.out.println("Worker number " + worker.workerID + " has disconnected.\n");
     }
 }
