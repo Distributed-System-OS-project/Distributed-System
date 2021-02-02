@@ -3,29 +3,28 @@ package distributedSystem.server;
 import distributedSystem.Job;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SlaveHandler {
+public class WorkerHandler {
 
     static int minimumID;
-    final int slaveID;
+    final int workerID;
     final char optimizedTask;
 
     Queue<Job> waitingJobs;
-    SlaveCommunicationThread comm;
+    WorkerCommunicationThread comm;
     int timeToComplete;
 
     Queue<Job> completedJobs;
 
 
-    public SlaveHandler(BufferedReader in, ObjectOutputStream out, char optimizedTask, Queue<Job> completedJobs) {
-        slaveID = minimumID++;
+    public WorkerHandler(BufferedReader in, ObjectOutputStream out, char optimizedTask, Queue<Job> completedJobs) {
+        workerID = minimumID++;
         this.optimizedTask = optimizedTask;
         waitingJobs = new LinkedList<>();
-        comm = new SlaveCommunicationThread(in, out, waitingJobs, completedJobs, this);
+        comm = new WorkerCommunicationThread(in, out, waitingJobs, completedJobs, this);
         timeToComplete = 0;
         comm.start();
         this.completedJobs = completedJobs;
@@ -54,8 +53,8 @@ public class SlaveHandler {
         System.out.println("Job number " + job.getJobID() + " has been completed.\n");
     }
 
-    public int getSlaveID() {
-        return this.slaveID;
+    public int getWorkerID() {
+        return this.workerID;
     }
 
     public char getOptimizedTask() {

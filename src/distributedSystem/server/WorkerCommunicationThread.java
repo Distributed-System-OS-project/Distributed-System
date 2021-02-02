@@ -3,20 +3,18 @@ package distributedSystem.server;
 import distributedSystem.Job;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.SocketTimeoutException;
 import java.util.Queue;
 
-public class SlaveCommunicationThread extends Thread {
+public class WorkerCommunicationThread extends Thread {
     BufferedReader in;
     ObjectOutputStream out;
     final Queue<Job> waitingJobs;
     final Queue<Job> completedJobs;
-    SlaveHandler parentSlave;
+    WorkerHandler parentSlave;
 
-    public SlaveCommunicationThread(BufferedReader in, ObjectOutputStream out, Queue<Job> waitingJobs, Queue<Job> completedJobs, SlaveHandler parent) {
+    public WorkerCommunicationThread(BufferedReader in, ObjectOutputStream out, Queue<Job> waitingJobs, Queue<Job> completedJobs, WorkerHandler parent) {
         this.in = in;
         this.out = out;
         this.waitingJobs = waitingJobs;

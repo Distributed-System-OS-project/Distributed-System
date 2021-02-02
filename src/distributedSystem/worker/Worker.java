@@ -1,14 +1,13 @@
-package distributedSystem.slave;
+package distributedSystem.worker;
 
 import distributedSystem.Job;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
-public class Slave {
+public class Worker {
     public static void main(String[] args) {
 
         char optimizedTask = args[0].toUpperCase().charAt(0);

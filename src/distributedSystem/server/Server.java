@@ -18,22 +18,22 @@ public class Server {
 
         ArrayList<ClientHandler> clients = new ArrayList<>();
         System.out.println("Initialized clients list");
-        ArrayList<SlaveHandler> slaves = new ArrayList<>();
-        System.out.println("Initialized slaves list");
+        ArrayList<WorkerHandler> workers = new ArrayList<>();
+        System.out.println("Initialized workers list");
 
         IntegerWrapper maxJobID = new IntegerWrapper(0);
 
         try {
             ServerSocket clientSocket = new ServerSocket(Integer.parseInt(args[0]));
-            ServerSocket slaveSocket = new ServerSocket(Integer.parseInt(args[1]));
+            ServerSocket workerSocket = new ServerSocket(Integer.parseInt(args[1]));
 
 
             Thread clientListener = new ClientListener(clientSocket, clients, readyJobs, maxJobID);
-            Thread slaveListener = new SlaveListener(slaveSocket, slaves, completedJobs, readyJobs);
+            Thread workerListener = new WorkerListener(workerSocket, workers, completedJobs, readyJobs);
             Thread notifyClient = new NotifyClient(clients, completedJobs);
 
             clientListener.start();
-            slaveListener.start();
+            workerListener.start();
             notifyClient.start();
 
             System.out.println("Started threads\n");
@@ -48,10 +48,10 @@ public class Server {
                     System.out.println("***\nReceived job\n" + nextJob.toString());
                     System.out.println("***\n");
 
-                    if (slaves.isEmpty()) {
+                    if (workers.isEmpty()) {
                         for (ClientHandler c : clients) {
                             if (c.clientID == nextJob.getClientID()) {
-                                c.writeToClient("No slaves available to take this task. Please try again later.");
+                                c.writeToClient("No workers available to take this task. Please try again later.");
                             }
                         }
                         Thread.sleep(1000);
@@ -60,22 +60,22 @@ public class Server {
 
                     char jobType = nextJob.getOptimizedTask();
 
-                    int minWaitTime = slaves.get(0).getTimeToComplete();
+                    int minWaitTime = workers.get(0).getTimeToComplete();
 
-                    if (slaves.get(0).getOptimizedTask() == jobType)
+                    if (workers.get(0).getOptimizedTask() == jobType)
                         minWaitTime += 2;
                     else
                         minWaitTime += 10;
 
                     //assigns the first queue to be the shortest (for now)
-                    SlaveHandler shortestQueue = slaves.get(0);
+                    WorkerHandler shortestQueue = workers.get(0);
 
-                    //go through slaves and compare wait times to find shortest queue
-                    for (int i = 1; i < slaves.size(); i++) {
+                    //go through workers and compare wait times to find shortest queue
+                    for (int i = 1; i < workers.size(); i++) {
 
-                        int waitTime = slaves.get(i).getTimeToComplete();
+                        int waitTime = workers.get(i).getTimeToComplete();
 
-                        if (jobType == slaves.get(i).getOptimizedTask())
+                        if (jobType == workers.get(i).getOptimizedTask())
                             waitTime += 2;
                         else
                             waitTime += 10;
@@ -83,7 +83,7 @@ public class Server {
 
                         if (waitTime < minWaitTime) {
                             minWaitTime = waitTime;
-                            shortestQueue = slaves.get(i);
+                            shortestQueue = workers.get(i);
                         }
                     }
 
@@ -91,7 +91,7 @@ public class Server {
                     //so it will add the nextJob to the shortest queue
                     shortestQueue.addJob(nextJob);
                     System.out.println("assigned job number " + nextJob.getJobID() +
-                            " to slave number " + shortestQueue.getSlaveID() + "\n--" + shortestQueue.getTimeToComplete() + "seconds to complete.\n" );
+                            " to worker number " + shortestQueue.getWorkerID() + "\n--" + shortestQueue.getTimeToComplete() + "seconds to complete.\n" );
 
                 } else {
                     Thread.sleep(100); // if this is not in place the server's other threads don't get any CPU time.
